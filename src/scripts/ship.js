@@ -12,6 +12,7 @@ export default function ship(length) {
   return {
     getHitCount,
     setHitCount,
+    getLength,
     hit,
     isSunk,
   };

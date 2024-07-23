@@ -1,4 +1,6 @@
 import player from "./player";
+import createBoardWithCoordinates from "./createBoardWithCoordinates";
+import { letterArray } from "./createBoardWithCoordinates";
 import _ from "lodash";
 
 const log = (stuff) => {
@@ -10,61 +12,34 @@ export default function gameDisplay() {
   const player2 = player();
 
   const board1 = player1.getPlayerBoard();
-  log(board1);
+  const board2 = player2.getPlayerBoard();
 
-  const coolBoard = createBoardWithCoordinates();
-  return coolBoard;
+  board1.placeBoat(2, "A3");
+  board1.placeBoat(3, "D5");
+
+  const boats1 = board1.getBoats();
+
+  const player1Board = createBoardWithCoordinates();
+  document.body.append(player1Board);
+
+  boats1.forEach((boat) => displayBoat(boat, player1Board));
 }
 
-const createBoardWithCoordinates = () => {
-  const boardWithCoordinates = document.createElement("div");
-  boardWithCoordinates.classList.add("board-with-co");
-  const board = createBoard();
-  const letterBand = createLetterBand();
-  const numBand = createNumBand();
-  boardWithCoordinates.append(numBand, board, letterBand);
-  return boardWithCoordinates;
+const translateCoordinatesToCellNum = (coordinate) => {
+  const [letter, num] = coordinate.split("");
+  const letterNum = letterArray().indexOf(letter);
+  const numNum = num - 1;
+  const translatedCoordinate = [numNum, letterNum].join("");
+  return translatedCoordinate;
 };
 
-const createBoard = () => {
-  const myBoard = document.createElement("div");
-  myBoard.classList = "board";
-  for (let i = 1; i <= 100; i++) {
-    myBoard.append(createBoardCell(i));
+const displayBoat = (boat, board) => {
+  const boatLength = boat.boat.getLength();
+  const cellNum = translateCoordinatesToCellNum(boat.coordinates);
+  const boatStart = cellNum;
+  const boatEnd = parseInt(cellNum) + parseInt(boatLength);
+  for (let i = boatStart; i < boatEnd; i++) {
+    const cellEl = document.getElementById(i);
+    cellEl.classList.add("boat");
   }
-  return myBoard;
-};
-
-const createBoardCell = (id) => {
-  const cell = document.createElement("div");
-  cell.classList.add("cell");
-  cell.id = id;
-  cell.textContent = id;
-  return cell;
-};
-
-const createCoordinateCell = (text) => {
-  const coordinate = document.createElement("div");
-  coordinate.classList.add("coordinate");
-  coordinate.textContent = text;
-  return coordinate;
-};
-
-const createNumBand = () => {
-  const numBand = document.createElement("div");
-  numBand.classList.add("num-band");
-
-  const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-  numArray.map((num) => numBand.append(createCoordinateCell(num)));
-
-  return numBand;
-};
-
-const createLetterBand = () => {
-  const letterBand = document.createElement("div");
-  letterBand.classList.add("letter-band");
-
-  const letterArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-  letterArray.map((letter) => letterBand.append(createCoordinateCell(letter)));
-  return letterBand;
 };
