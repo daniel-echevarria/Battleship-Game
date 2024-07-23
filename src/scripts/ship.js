@@ -1,6 +1,6 @@
-const createShip = (length) => {
+export default function ship(length) {
   let hitCount = 0;
-  let shipsLength = length;
+  const shipsLength = length;
 
   const getHitCount = () => hitCount;
   const setHitCount = (newHitCount) => (hitCount = newHitCount);
@@ -15,6 +15,4 @@ const createShip = (length) => {
     hit,
     isSunk,
   };
-};
-
-export default createShip;
+}

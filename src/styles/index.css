@@ -1,0 +1,24 @@
+:root {
+  --board-size: 400px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  border: 2px solid black;
+  height: var(--board-size);
+  width: var(--board-size);
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(calc(var(--board-size) / 10), 1fr)
+  );
+}
+
+.cell {
+  border: 1px solid black;
+}
