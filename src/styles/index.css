@@ -8,8 +8,17 @@ body {
   align-items: center;
 }
 
+.board-with-co {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-template-rows: 1fr 20px;
+  grid-template-areas:
+    "num-band board"
+    ". letter-band";
+}
+
 .board {
-  border: 2px solid black;
+  grid-area: board;
   height: var(--board-size);
   width: var(--board-size);
   display: grid;
@@ -19,6 +28,29 @@ body {
   );
 }
 
+.letter-band {
+  grid-area: letter-band;
+  display: flex;
+  width: var(--board-size);
+}
+
+.num-band {
+  display: flex;
+  flex-direction: column;
+  grid-area: num-band;
+}
+
 .cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightskyblue;
   border: 1px solid black;
+}
+
+.coordinate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
 }
