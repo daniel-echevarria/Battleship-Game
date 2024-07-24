@@ -1,28 +1,51 @@
-export default function createBoardWithCoordinates() {
+const log = (stuff) => {
+  console.log(stuff);
+};
+
+export default function createBoardWithCoordinates(playerBoard) {
   const boardWithCoordinates = document.createElement("div");
   boardWithCoordinates.classList.add("board-with-co");
-  const board = createBoard();
+  const board = createBoard(playerBoard);
   const letterBand = createLetterBand();
   const numBand = createNumBand();
   boardWithCoordinates.append(numBand, board, letterBand);
   return boardWithCoordinates;
 }
 
-const createBoard = () => {
+const createBoard = (playerBoard) => {
   const myBoard = document.createElement("div");
   myBoard.classList = "board";
   for (let i = 0; i < 100; i++) {
-    myBoard.append(createBoardCell(i));
+    myBoard.append(createBoardCell(i, playerBoard));
   }
   return myBoard;
 };
 
-const createBoardCell = (id) => {
-  const cell = document.createElement("div");
+const createBoardCell = (id, playerBoard) => {
+  const cell = document.createElement("button");
   cell.classList.add("cell");
   cell.id = id;
-  // cell.textContent = id;
+  cell.textContent = id;
+  cell.addEventListener("click", function () {
+    handleCellClick(cell, playerBoard);
+  });
   return cell;
+};
+
+const handleCellClick = (cell, playerBoard) => {
+  const classListArray = [...cell.classList];
+  cell.classList.add("striked");
+  cell.textContent = "X";
+  if (classListArray.includes("boat")) {
+    const boats = playerBoard.getBoats();
+    const hitBoat = boats.find((boat) =>
+      classListArray.includes(`ship-${boat.boat.getId()}`)
+    );
+    hitBoat.boat.hit();
+    if (playerBoard.areAllBoatsSunk()) {
+      log("game over!");
+    }
+  }
 };
 
 const createCoordinateCell = (text) => {

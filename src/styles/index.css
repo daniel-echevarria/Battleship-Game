@@ -1,5 +1,9 @@
 :root {
-  --board-size: 400px;
+  --board-size: 500px;
+}
+
+button {
+  cursor: pointer;
 }
 
 body {
@@ -58,4 +62,8 @@ body {
 .boat {
   background-color: blue;
   border: 2px solid blue;
+}
+
+.boat.striked {
+  background-color: red;
 }

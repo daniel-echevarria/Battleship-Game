@@ -20,10 +20,15 @@ export default function gameBoard() {
     hitBoat ? hitBoat.boat.hit() : missedShots.push(coordinates);
   };
 
+  const areAllBoatsSunk = () => {
+    return getBoats().every((boat) => boat.boat.isSunk());
+  };
+
   return {
     placeBoat,
     receiveAttack,
     getBoats,
     getMissedShots,
+    areAllBoatsSunk,
   };
 }

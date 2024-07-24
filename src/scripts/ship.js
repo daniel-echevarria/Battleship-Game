@@ -1,7 +1,11 @@
+let count = 0;
+
 export default function ship(length) {
+  const shipId = count++;
   let hitCount = 0;
   const shipsLength = length;
 
+  const getId = () => shipId;
   const getHitCount = () => hitCount;
   const setHitCount = (newHitCount) => (hitCount = newHitCount);
   const getLength = () => shipsLength;
@@ -10,6 +14,7 @@ export default function ship(length) {
   const isSunk = () => getLength() === getHitCount();
 
   return {
+    getId,
     getHitCount,
     setHitCount,
     getLength,

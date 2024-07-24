@@ -61,3 +61,20 @@ describe("receiveAttack(coordinates) calls hit on the boat if there is a boat or
     expect(myBoat.getHitCount()).toBe(1);
   });
 });
+
+describe("areAllBoatsSunk returns true if all boats are sunk and false otherwise", () => {
+  test("when only one boat is present and the boat is sunk it returns true", () => {
+    const myBoard = gameBoard();
+    myBoard.placeBoat(1, "e5");
+    myBoard.receiveAttack("e5");
+    expect(myBoard.areAllBoatsSunk()).toBe(true);
+  });
+
+  test("when 2 boats are present and one is sunk it returns false", () => {
+    const myBoard = gameBoard();
+    myBoard.placeBoat(1, "e5");
+    myBoard.placeBoat(1, "d3");
+    myBoard.receiveAttack("e5");
+    expect(myBoard.areAllBoatsSunk()).toBe(false);
+  });
+});
