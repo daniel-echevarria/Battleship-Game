@@ -24,7 +24,7 @@ const createBoard = (playerBoard) => {
 const createBoardCell = (id, playerBoard) => {
   const cell = document.createElement("button");
   cell.classList.add("cell");
-  cell.id = id;
+  cell.id = `cell-${id}`;
   cell.textContent = id;
   cell.addEventListener("click", function () {
     handleCellClick(cell, playerBoard);

@@ -16,14 +16,17 @@ export default function gameDisplay() {
 
   board1.placeBoat(2, "A3");
   board1.placeBoat(3, "D5");
-  board1.placeBoat(4, "B7");
+  board2.placeBoat(4, "B7");
 
   const boats1 = board1.getBoats();
+  const boats2 = board2.getBoats();
 
   const player1Board = createBoardWithCoordinates(board1);
-  document.body.append(player1Board);
+  const player2Board = createBoardWithCoordinates(board2);
+  document.body.append(player1Board, player2Board);
 
   boats1.forEach((boat) => displayBoat(boat, player1Board));
+  boats2.forEach((boat) => displayBoat(boat, player2Board));
 }
 
 const translateCoordinatesToCellNum = (coordinate) => {
@@ -43,7 +46,7 @@ const displayBoat = (boat, board) => {
   const boatEnd = parseInt(cellNum) + parseInt(boatLength);
 
   for (let i = boatStart; i < boatEnd; i++) {
-    const cellEl = document.getElementById(i);
+    const cellEl = board.querySelector(`#cell-${i}`);
     cellEl.classList.add("boat", shipId);
   }
 };
