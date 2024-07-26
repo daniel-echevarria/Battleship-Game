@@ -1,5 +1,6 @@
 import {
   LETTERS,
+  translateCellNumToCoordinate,
   translateCoordinatesToCellNum,
 } from "./coordinateTranslation";
 
@@ -55,18 +56,12 @@ const createBoardCell = (id, playerBoard) => {
 };
 
 const handleCellClick = (cell, playerBoard) => {
-  const classListArray = [...cell.classList];
-  cell.classList.add("striked");
-  cell.textContent = "X";
-  if (classListArray.includes("boat")) {
-    const boats = playerBoard.getBoats();
-    const hitBoat = boats.find((boat) =>
-      classListArray.includes(`ship-${boat.boat.getId()}`)
-    );
-    hitBoat.boat.hit();
-    if (playerBoard.areAllBoatsSunk()) {
-      log("game over!");
-    }
+  const cellNum = cell.id.split("-")[1];
+  const coordinate = translateCellNumToCoordinate(cellNum);
+  playerBoard.receiveAttack(coordinate);
+  log(coordinate);
+  if (playerBoard.areAllBoatsSunk()) {
+    log("game over");
   }
 };
 

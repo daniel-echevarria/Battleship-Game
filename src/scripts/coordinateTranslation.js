@@ -12,9 +12,10 @@ export const translateCoordinatesToCellNum = (coordinate) => {
 
 export const translateCellNumToCoordinate = (cellNum) => {
   const [first, second] = cellNum.split("");
-  const letterIndex = parseInt(first);
-  const coordinateLetter = LETTERS()[letterIndex];
-  const coordinateNum = second ? parseInt(second) + 1 : parseInt(first) + 1;
-  const coordinate = [coordinateLetter, coordinateNum].join("");
+  const numCoordinate = parseInt(first) + 1;
+  const letterCoordinate = second
+    ? LETTERS()[parseInt(second)]
+    : LETTERS()[first];
+  const coordinate = [letterCoordinate, numCoordinate].join("");
   return coordinate;
 };

@@ -22,4 +22,10 @@ describe("translateCellNumToCoordinate turns a cellNum to a coordinate", () => {
   test("99 returns j10", () => {
     expect(translateCellNumToCoordinate("99")).toBe("J10");
   });
+  test("77 returns H8", () => {
+    expect(translateCellNumToCoordinate("77")).toBe("H8");
+  });
+  test("76 returns G8", () => {
+    expect(translateCellNumToCoordinate("76")).toBe("G8");
+  });
 });

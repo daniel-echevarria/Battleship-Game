@@ -8,11 +8,18 @@ export default function gameBoard() {
   const getMissedShots = () => missedShots;
 
   const placeBoat = (boatSize, coordinates) => {
+    verifyBoatInfos(boatSize, coordinates);
     const boat = {
       boat: ship(boatSize),
       coordinates: coordinates,
     };
     boats.push(boat);
+  };
+
+  const verifyBoatInfos = (boatSize, coordinates) => {
+    if (boatSize != coordinates.length) {
+      throw new Error("Boat size needs to match coordinates length");
+    }
   };
 
   const receiveAttack = (coordinates) => {
