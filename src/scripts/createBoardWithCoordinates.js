@@ -1,3 +1,5 @@
+import { LETTERS } from "./coordinateTranslation";
+
 const log = (stuff) => {
   console.log(stuff);
 };
@@ -5,14 +7,42 @@ const log = (stuff) => {
 export default function createBoardWithCoordinates(playerBoard) {
   const boardWithCoordinates = document.createElement("div");
   boardWithCoordinates.classList.add("board-with-co");
-  const board = createBoard(playerBoard);
+  const numberedBoard = createNumberedBoard(playerBoard);
+  addBoats(numberedBoard, playerBoard);
   const letterBand = createLetterBand();
   const numBand = createNumBand();
-  boardWithCoordinates.append(numBand, board, letterBand);
+  boardWithCoordinates.append(numBand, numberedBoard, letterBand);
   return boardWithCoordinates;
 }
 
-const createBoard = (playerBoard) => {
+const addBoats = (numberedBoard, playerBoard) => {
+  const boats = playerBoard.getBoats();
+  boats.forEach((boat) => displayBoat(boat, numberedBoard));
+};
+
+const displayBoat = (boat, board) => {
+  const boatLength = boat.boat.getLength();
+  const shipId = `ship-${boat.boat.getId()}`;
+
+  const cellNum = translateCoordinatesToCellNum(boat.coordinates);
+  const boatStart = cellNum;
+  const boatEnd = parseInt(cellNum) + parseInt(boatLength);
+
+  for (let i = boatStart; i < boatEnd; i++) {
+    const cellEl = board.querySelector(`#cell-${i}`);
+    cellEl.classList.add("boat", shipId);
+  }
+};
+
+const translateCoordinatesToCellNum = (coordinate) => {
+  const [letter, num] = coordinate.split("");
+  const letterNum = LETTERS().indexOf(letter);
+  const numNum = num - 1;
+  const translatedCoordinate = [numNum, letterNum].join("");
+  return translatedCoordinate;
+};
+
+const createNumberedBoard = (playerBoard) => {
   const myBoard = document.createElement("div");
   myBoard.classList = "board";
   for (let i = 0; i < 100; i++) {
@@ -68,21 +98,6 @@ const createNumBand = () => {
 const createLetterBand = () => {
   const letterBand = document.createElement("div");
   letterBand.classList.add("letter-band");
-
-  const letterArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-  letterArray.map((letter) => letterBand.append(createCoordinateCell(letter)));
+  LETTERS().map((letter) => letterBand.append(createCoordinateCell(letter)));
   return letterBand;
 };
-
-export const letterArray = () => [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-];
