@@ -1,4 +1,7 @@
-import { LETTERS } from "./coordinateTranslation";
+import {
+  LETTERS,
+  translateCoordinatesToCellNum,
+} from "./coordinateTranslation";
 
 const log = (stuff) => {
   console.log(stuff);
@@ -21,25 +24,14 @@ const addBoats = (numberedBoard, playerBoard) => {
 };
 
 const displayBoat = (boat, board) => {
-  const boatLength = boat.boat.getLength();
   const shipId = `ship-${boat.boat.getId()}`;
-
-  const cellNum = translateCoordinatesToCellNum(boat.coordinates);
-  const boatStart = cellNum;
-  const boatEnd = parseInt(cellNum) + parseInt(boatLength);
-
-  for (let i = boatStart; i < boatEnd; i++) {
-    const cellEl = board.querySelector(`#cell-${i}`);
+  const boatCellsNumbers = boat.coordinates.map((coordinate) =>
+    translateCoordinatesToCellNum(coordinate)
+  );
+  boatCellsNumbers.forEach((cellNum) => {
+    const cellEl = board.querySelector(`#cell-${cellNum}`);
     cellEl.classList.add("boat", shipId);
-  }
-};
-
-const translateCoordinatesToCellNum = (coordinate) => {
-  const [letter, num] = coordinate.split("");
-  const letterNum = LETTERS().indexOf(letter);
-  const numNum = num - 1;
-  const translatedCoordinate = [numNum, letterNum].join("");
-  return translatedCoordinate;
+  });
 };
 
 const createNumberedBoard = (playerBoard) => {

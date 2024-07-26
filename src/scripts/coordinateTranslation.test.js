@@ -5,13 +5,13 @@ import {
 
 describe(" translateCoordinatesToCellNum turns a 'letter + num' coordinate into a cell num", () => {
   test("a1 returns 0", () => {
-    expect(translateCoordinatesToCellNum("a1")).toBe(0);
+    expect(translateCoordinatesToCellNum("A1")).toBe(0);
   });
   test("j10 returns 99", () => {
-    expect(translateCoordinatesToCellNum("j10")).toBe(99);
+    expect(translateCoordinatesToCellNum("J10")).toBe(99);
   });
   test("h7 returns 67", () => {
-    expect(translateCoordinatesToCellNum("h7")).toBe(67);
+    expect(translateCoordinatesToCellNum("H7")).toBe(67);
   });
 });
 

@@ -1,4 +1,4 @@
-import gameDisplay from "./gameDisplay";
+import game from "./game";
 import "../styles/index.css";
 
-gameDisplay();
+game();

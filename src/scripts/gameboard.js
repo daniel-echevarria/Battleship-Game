@@ -16,7 +16,9 @@ export default function gameBoard() {
   };
 
   const receiveAttack = (coordinates) => {
-    const hitBoat = boats.find((boat) => boat.coordinates == coordinates);
+    const hitBoat = boats.find((boat) =>
+      boat.coordinates.includes(coordinates)
+    );
     hitBoat ? hitBoat.boat.hit() : missedShots.push(coordinates);
   };
 

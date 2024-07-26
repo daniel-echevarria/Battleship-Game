@@ -6,7 +6,7 @@ describe("placeBoat function adds a boat object with it's coordinates to the boa
 
     beforeAll(() => {
       myBoard = gameBoard();
-      myBoard.placeBoat(1, "a1");
+      myBoard.placeBoat(1, ["a1"]);
     });
 
     test("boats array length returns 1", () => {
@@ -14,7 +14,7 @@ describe("placeBoat function adds a boat object with it's coordinates to the boa
     });
 
     test("boats[0].coordinates returns 'a1'", () => {
-      expect(myBoard.getBoats()[0].coordinates).toBe("a1");
+      expect(myBoard.getBoats()[0].coordinates).toEqual(["a1"]);
     });
   });
 });
@@ -22,22 +22,22 @@ describe("placeBoat function adds a boat object with it's coordinates to the boa
 describe("receiveAttack(coordinates) calls hit on the boat if there is a boat or adds the coordinates to the missed shots", () => {
   test("getMissedShots includes b7 when there is no boat on b7", () => {
     const myBoard = gameBoard();
-    myBoard.receiveAttack("b7");
-    expect(myBoard.getMissedShots()).toContain("b7");
+    myBoard.receiveAttack("B7");
+    expect(myBoard.getMissedShots()).toContain("B7");
   });
 
   test("getMissedShots includes c6 when there is no boat on c6", () => {
     const myBoard = gameBoard();
-    myBoard.receiveAttack("c6");
-    expect(myBoard.getMissedShots()).toContain("c6");
+    myBoard.receiveAttack("C6");
+    expect(myBoard.getMissedShots()).toContain("C6");
   });
 
   test("getMissedShots includes d5 and h10 when there is no boat on these", () => {
     const myBoard = gameBoard();
-    myBoard.receiveAttack("d5");
-    myBoard.receiveAttack("h10");
+    myBoard.receiveAttack("D5");
+    myBoard.receiveAttack("H10");
     expect(myBoard.getMissedShots()).toEqual(
-      expect.arrayContaining(["d5", "h10"])
+      expect.arrayContaining(["D5", "H10"])
     );
   });
 
@@ -48,15 +48,15 @@ describe("receiveAttack(coordinates) calls hit on the boat if there is a boat or
 
   test("getMissedShots is empty if there is a boat on d4 and receiveAttach is called with d4", () => {
     const myBoard = gameBoard();
-    myBoard.placeBoat(1, "d4");
-    myBoard.receiveAttack("d4");
+    myBoard.placeBoat(1, ["D4"]);
+    myBoard.receiveAttack("D4");
     expect(myBoard.getMissedShots().length).toBe(0);
   });
 
   test("boat on e5's hitCount is 1 if received Attack on e5", () => {
     const myBoard = gameBoard();
-    myBoard.placeBoat(1, "e5");
-    myBoard.receiveAttack("e5");
+    myBoard.placeBoat(1, ["E5"]);
+    myBoard.receiveAttack("E5");
     const myBoat = myBoard.getBoats()[0].boat;
     expect(myBoat.getHitCount()).toBe(1);
   });
@@ -65,16 +65,16 @@ describe("receiveAttack(coordinates) calls hit on the boat if there is a boat or
 describe("areAllBoatsSunk returns true if all boats are sunk and false otherwise", () => {
   test("when only one boat is present and the boat is sunk it returns true", () => {
     const myBoard = gameBoard();
-    myBoard.placeBoat(1, "e5");
-    myBoard.receiveAttack("e5");
+    myBoard.placeBoat(1, ["E5"]);
+    myBoard.receiveAttack("E5");
     expect(myBoard.areAllBoatsSunk()).toBe(true);
   });
 
   test("when 2 boats are present and one is sunk it returns false", () => {
     const myBoard = gameBoard();
-    myBoard.placeBoat(1, "e5");
-    myBoard.placeBoat(1, "d3");
-    myBoard.receiveAttack("e5");
+    myBoard.placeBoat(1, ["E5"]);
+    myBoard.placeBoat(1, ["D3"]);
+    myBoard.receiveAttack("E5");
     expect(myBoard.areAllBoatsSunk()).toBe(false);
   });
 });
