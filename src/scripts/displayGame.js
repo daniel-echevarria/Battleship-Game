@@ -8,30 +8,32 @@ const log = (stuff) => {
   console.log(stuff);
 };
 
-export default function createBoardWithCoordinates(playerBoard) {
+export default function displayGame(player) {
+  const playerBoard = player.getPlayerBoard();
   const boardWithCoordinates = document.createElement("div");
   boardWithCoordinates.classList.add("board-with-co");
   const numberedBoard = createNumberedBoard(playerBoard);
-  addBoats(numberedBoard, playerBoard);
+  addBoats(numberedBoard, player);
   const letterBand = createLetterBand();
   const numBand = createNumBand();
   boardWithCoordinates.append(numBand, numberedBoard, letterBand);
   return boardWithCoordinates;
 }
 
-const addBoats = (numberedBoard, playerBoard) => {
-  const boats = playerBoard.getBoats();
-  boats.forEach((boat) => displayBoat(boat, numberedBoard));
+const addBoats = (numberedBoard, player) => {
+  const boats = player.getPlayerBoard().getBoats();
+  if (player.getPlayerType() === "human") {
+    boats.forEach((boat) => displayBoat(boat, numberedBoard));
+  }
 };
 
 const displayBoat = (boat, board) => {
-  const shipId = `ship-${boat.boat.getId()}`;
   const boatCellsNumbers = boat.coordinates.map((coordinate) =>
     translateCoordinatesToCellNum(coordinate)
   );
   boatCellsNumbers.forEach((cellNum) => {
     const cellEl = board.querySelector(`#cell-${cellNum}`);
-    cellEl.classList.add("boat", shipId);
+    cellEl.classList.add("boat");
   });
 };
 
@@ -39,7 +41,8 @@ const createNumberedBoard = (playerBoard) => {
   const myBoard = document.createElement("div");
   myBoard.classList = "board";
   for (let i = 0; i < 100; i++) {
-    myBoard.append(createBoardCell(i, playerBoard));
+    const cell = createBoardCell(i, playerBoard);
+    myBoard.append(cell);
   }
   return myBoard;
 };
@@ -48,21 +51,35 @@ const createBoardCell = (id, playerBoard) => {
   const cell = document.createElement("button");
   cell.classList.add("cell");
   cell.id = `cell-${id}`;
-  cell.textContent = id;
+  // cell.textContent = id;
   cell.addEventListener("click", function () {
-    handleCellClick(cell, playerBoard);
+    launchAttack(cell, playerBoard);
+    displayAttack(playerBoard);
+    playerBoard.areAllBoatsSunk() && handleEndGame();
   });
   return cell;
 };
 
-const handleCellClick = (cell, playerBoard) => {
+const displayAttack = (playerBoard) => {
+  const missedShots = playerBoard.getMissedShots();
+  const hits = playerBoard.getHits();
+  const strikedWater = missedShots.map((shot) =>
+    translateCoordinatesToCellNum(shot)
+  );
+  const strikedBoat = hits.map((shot) => {
+    translateCoordinatesToCellNum(shot);
+  });
+};
+
+const handleEndGame = () => {
+  log("game over");
+};
+
+const launchAttack = (cell, playerBoard) => {
   const cellNum = cell.id.split("-")[1];
   const coordinate = translateCellNumToCoordinate(cellNum);
   playerBoard.receiveAttack(coordinate);
   log(coordinate);
-  if (playerBoard.areAllBoatsSunk()) {
-    log("game over");
-  }
 };
 
 const createCoordinateCell = (text) => {

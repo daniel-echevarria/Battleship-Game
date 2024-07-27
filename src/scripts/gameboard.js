@@ -3,12 +3,14 @@ import ship from "./ship";
 export default function gameBoard() {
   let boats = [];
   let missedShots = [];
+  let hits = [];
 
   const getBoats = () => boats;
   const getMissedShots = () => missedShots;
+  const getHits = () => hits;
 
   const placeBoat = (boatSize, coordinates) => {
-    verifyBoatInfos(boatSize, coordinates);
+    // verifyBoatInfos(boatSize, coordinates);
     const boat = {
       boat: ship(boatSize),
       coordinates: coordinates,
@@ -16,17 +18,22 @@ export default function gameBoard() {
     boats.push(boat);
   };
 
-  const verifyBoatInfos = (boatSize, coordinates) => {
-    if (boatSize != coordinates.length) {
-      throw new Error("Boat size needs to match coordinates length");
-    }
-  };
+  // const verifyBoatInfos = (boatSize, coordinates) => {
+  //   if (boatSize != coordinates.length) {
+  //     throw new Error("Boat size needs to match coordinates length");
+  //   }
+  // };
 
   const receiveAttack = (coordinates) => {
     const hitBoat = boats.find((boat) =>
       boat.coordinates.includes(coordinates)
     );
-    hitBoat ? hitBoat.boat.hit() : missedShots.push(coordinates);
+    if (hitBoat) {
+      hitBoat.boat.hit();
+      hits.push(coordinates);
+    } else {
+      missedShots.push(coordinates);
+    }
   };
 
   const areAllBoatsSunk = () => {
@@ -38,6 +45,7 @@ export default function gameBoard() {
     receiveAttack,
     getBoats,
     getMissedShots,
+    getHits,
     areAllBoatsSunk,
   };
 }

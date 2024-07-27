@@ -1,5 +1,5 @@
 import player from "./player";
-import createBoardWithCoordinates from "./createBoardWithCoordinates";
+import displayGame from "./displayGame";
 
 const log = (stuff) => {
   console.log(stuff);
@@ -16,8 +16,8 @@ export default function game() {
   board1.placeBoat(3, ["D5", "E5", "F5"]);
   board2.placeBoat(4, ["B7", "B8", "B9", "B10"]);
 
-  const player1Board = createBoardWithCoordinates(board1);
-  const player2Board = createBoardWithCoordinates(board2);
+  const player1Board = displayGame(player1);
+  const player2Board = displayGame(player2);
 
   document.body.append(player1Board, player2Board);
 }
