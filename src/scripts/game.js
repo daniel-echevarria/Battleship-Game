@@ -1,6 +1,9 @@
 import player from "./player";
 import displayGame from "./displayGame";
-import { translateCellNumToCoordinate } from "./coordinateTranslation";
+import {
+  translateCellNumToCoordinate,
+  translateCoordinatesToCellNum,
+} from "./coordinateTranslation";
 import { updateBoard } from "./displayGame";
 
 const log = (stuff) => {
@@ -26,12 +29,11 @@ export default function game() {
   const computerPlayerBoardEl = displayGame(computerPlayer);
 
   const computerCells = computerPlayerBoardEl.querySelectorAll("button");
-  getHumanAttack(computerCells);
 
   async function gameLoop() {
     while (!isGameOver) {
       if (currentPlayer === humanPlayer) {
-        await waitForBoardClick();
+        await waitForCellClick();
         updateBoard(computerPlayerBoardEl, computerBoard);
         currentPlayer = computerPlayer;
       } else {
@@ -41,6 +43,7 @@ export default function game() {
       }
       if (computerBoard.areAllBoatsSunk() || humanBoard.areAllBoatsSunk()) {
         isGameOver = true;
+        handleEndGame();
       }
     }
   }
@@ -61,21 +64,20 @@ function getPromiseFromEvent(boardEl, event) {
   });
 }
 
-async function waitForBoardClick() {
+async function waitForCellClick() {
   const computerBoard = document.querySelectorAll(".board")[1];
   await getPromiseFromEvent(computerBoard, "click");
 }
 
-function getHumanAttack(computerCells) {
-  computerCells.forEach((cell) => {
-    cell.addEventListener("click", () => {
-      return cell.id;
-    });
-  });
-}
-
 const computerShot = (humanBoard) => {
-  const randNum = Math.floor(Math.random() * 100);
+  const attemptedNumbers = humanBoard
+    .getAttempts()
+    .map((attempt) => translateCoordinatesToCellNum(attempt));
+  let randNum = Math.floor(Math.random() * 100);
+  while (attemptedNumbers.includes(randNum)) {
+    randNum = Math.floor(Math.random() * 100);
+  }
+  log(randNum);
   launchAttack(randNum, humanBoard);
 };
 

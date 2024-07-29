@@ -8,6 +8,7 @@ export default function gameBoard() {
   const getBoats = () => boats;
   const getMissedShots = () => missedShots;
   const getHits = () => hits;
+  const getAttempts = () => [getMissedShots(), getHits()].flat(1);
 
   const placeBoat = (boatSize, coordinates) => {
     // verifyBoatInfos(boatSize, coordinates);
@@ -46,6 +47,7 @@ export default function gameBoard() {
     getBoats,
     getMissedShots,
     getHits,
+    getAttempts,
     areAllBoatsSunk,
   };
 }
