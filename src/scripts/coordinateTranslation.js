@@ -11,7 +11,8 @@ export const translateCoordinatesToCellNum = (coordinate) => {
 };
 
 export const translateCellNumToCoordinate = (cellNum) => {
-  const [first, second] = cellNum.split("");
+  const cellNumString = cellNum.toString();
+  const [first, second] = cellNumString.split("");
   const numCoordinate = parseInt(first) + 1;
   const letterCoordinate = second
     ? LETTERS()[parseInt(second)]
