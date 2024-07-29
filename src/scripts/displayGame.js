@@ -52,7 +52,10 @@ const createBoardCell = (id, playerBoard) => {
   const cell = document.createElement("button");
   cell.classList.add("cell");
   cell.id = `cell-${id}`;
-  cell.addEventListener("click", () => launchAttack(id, playerBoard));
+  cell.addEventListener("click", () => {
+    launchAttack(id, playerBoard);
+    cell.disabled = true;
+  });
   return cell;
 };
 

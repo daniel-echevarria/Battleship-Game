@@ -11,15 +11,14 @@ const log = (stuff) => {
 };
 
 export default function game() {
-  let isGameOver = false;
-
   const humanPlayer = player("human");
   const computerPlayer = player("computer");
 
+  let isGameOver = false;
+  let currentPlayer = humanPlayer;
+
   const humanBoard = humanPlayer.getPlayerBoard();
   const computerBoard = computerPlayer.getPlayerBoard();
-
-  let currentPlayer = humanPlayer;
 
   humanBoard.placeBoat(2, ["A3", "A4"]);
   humanBoard.placeBoat(3, ["D5", "E5", "F5"]);
@@ -54,19 +53,20 @@ export default function game() {
   gameLoop();
 }
 
-function getPromiseFromEvent(boardEl, event) {
+function getPromiseFromEvent(cell, event) {
   return new Promise((resolve) => {
     const listener = () => {
-      boardEl.removeEventListener(event, listener);
-      resolve();
+      cell.removeEventListener(event, listener);
+      resolve(cell);
     };
-    boardEl.addEventListener(event, listener);
+    cell.addEventListener(event, listener);
   });
 }
 
 async function waitForCellClick() {
-  const computerBoard = document.querySelectorAll(".board")[1];
-  await getPromiseFromEvent(computerBoard, "click");
+  const cell = document.querySelectorAll(".board")[1];
+  const cellNum = await getPromiseFromEvent(cell, "click");
+  return cellNum;
 }
 
 const computerShot = (humanBoard) => {
