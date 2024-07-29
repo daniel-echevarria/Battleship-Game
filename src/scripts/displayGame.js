@@ -1,6 +1,6 @@
 import { createLetterBand, createNumBand } from "./boardDomCoordinates";
 import { translateCoordinatesToCellNum } from "./coordinateTranslation";
-import { handleEndGame, launchAttack } from "./game";
+import { launchAttack } from "./game";
 
 const log = (stuff) => {
   console.log(stuff);
@@ -52,23 +52,30 @@ const createBoardCell = (id, playerBoard) => {
   const cell = document.createElement("button");
   cell.classList.add("cell");
   cell.id = `cell-${id}`;
-  // cell.textContent = id;
-  cell.addEventListener("click", function () {
-    launchAttack(cellNum, playerBoard);
-    // displayAttack(cell, playerBoard);
-    cell.classList.add("striked");
-    playerBoard.areAllBoatsSunk() && handleEndGame();
-  });
+  cell.addEventListener("click", () => launchAttack(id, playerBoard));
   return cell;
 };
 
-const displayAttack = (cell, playerBoard) => {
-  const cellNum = parseInt(cell.id.split("-")[1]);
+export const updateBoard = (boardEl, playerBoard) => {
+  displayHits(boardEl, playerBoard);
+  displayMissed(boardEl, playerBoard);
+};
+
+const displayHits = (boardEl, playerBoard) => {
   const hits = playerBoard.getHits();
-  const strikedBoat = hits.map((shot) => {
-    return translateCoordinatesToCellNum(shot);
+  hits.forEach((hit) => {
+    const cellId = translateCoordinatesToCellNum(hit);
+    const cellEl = boardEl.querySelector(`#cell-${cellId}`);
+    cellEl.classList.add("boat");
+    cellEl.classList.add("striked");
   });
-  if (strikedBoat.includes(cellNum)) {
-    cell.classList.add("boat");
-  }
+};
+
+const displayMissed = (boardEl, playerBoard) => {
+  const missedShots = playerBoard.getMissedShots();
+  missedShots.forEach((shot) => {
+    const cellId = translateCoordinatesToCellNum(shot);
+    const cellEl = boardEl.querySelector(`#cell-${cellId}`);
+    cellEl.classList.add("striked");
+  });
 };

@@ -4,35 +4,72 @@ import {
   translateCellNumToCoordinate,
   translateCoordinatesToCellNum,
 } from "./coordinateTranslation";
+import { updateBoard } from "./displayGame";
 
 const log = (stuff) => {
   console.log(stuff);
 };
 
 export default function game() {
-  let isGameOver = false;
+  const humanPlayer = player("human");
+  const computerPlayer = player("computer");
 
-  const player1 = player("human");
-  const player2 = player("computer");
+  const humanBoard = humanPlayer.getPlayerBoard();
+  const computerBoard = computerPlayer.getPlayerBoard();
 
-  const board1 = player1.getPlayerBoard();
-  const board2 = player2.getPlayerBoard();
+  let currentPlayer = humanPlayer;
 
-  const players = [player1, player2];
-  let duePlayer = players[0];
+  humanBoard.placeBoat(2, ["A3", "A4"]);
+  humanBoard.placeBoat(3, ["D5", "E5", "F5"]);
+  computerBoard.placeBoat(4, ["B7", "B8", "B9", "B10"]);
 
-  board1.placeBoat(2, ["A3", "A4"]);
-  board1.placeBoat(3, ["D5", "E5", "F5"]);
-  board2.placeBoat(4, ["B7", "B8", "B9", "B10"]);
+  const humanPlayerBoardEl = displayGame(humanPlayer);
+  const computerPlayerBoardEl = displayGame(computerPlayer);
 
-  const player1BoardEl = displayGame(player1);
-  const player2BoardEl = displayGame(player2);
+  const computerCells = computerPlayerBoardEl.querySelectorAll("button");
+  getHumanAttack(computerCells);
 
-  computerShot(board1);
+  async function gameLoop() {
+    for (let i = 0; i < 10; i++) {
+      if (currentPlayer === humanPlayer) {
+        await waitForBoardClick();
+        currentPlayer = computerPlayer;
+        updateBoard(computerPlayerBoardEl, computerBoard);
+      } else {
+        computerShot(humanBoard);
+        updateBoard(humanPlayerBoardEl, humanBoard);
+        currentPlayer = humanPlayer;
+      }
+    }
+  }
 
-  renderBoard(player1BoardEl, board1);
+  // while playerBoard.areAllBoatsSunk() && handleEndGame();
+  document.body.append(humanPlayerBoardEl, computerPlayerBoardEl);
 
-  document.body.append(player1BoardEl, player2BoardEl);
+  gameLoop();
+}
+
+function getPromiseFromEvent(boardEl, event) {
+  return new Promise((resolve) => {
+    const listener = () => {
+      boardEl.removeEventListener(event, listener);
+      resolve();
+    };
+    boardEl.addEventListener(event, listener);
+  });
+}
+
+async function waitForBoardClick() {
+  const computerBoard = document.querySelectorAll(".board")[1];
+  await getPromiseFromEvent(computerBoard, "click");
+}
+
+function getHumanAttack(computerCells) {
+  computerCells.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      return cell.id;
+    });
+  });
 }
 
 const computerShot = (humanBoard) => {
@@ -43,21 +80,6 @@ const computerShot = (humanBoard) => {
 export const launchAttack = (cellNum, playerBoard) => {
   const coordinate = translateCellNumToCoordinate(cellNum);
   playerBoard.receiveAttack(coordinate);
-};
-
-const renderBoard = (boardEl, playerBoard) => {
-  const missedShots = playerBoard.getMissedShots();
-  const hits = playerBoard.getHits();
-  missedShots.forEach((shot) => {
-    const cellId = translateCoordinatesToCellNum(shot);
-    const cellEl = boardEl.querySelector(`#cell-${cellId}`);
-    cellEl.classList.add("striked");
-  });
-  hits.forEach((hit) => {
-    const cellId = translateCoordinatesToCellNum(hit);
-    const cellEl = boardEl.querySelector(`#cell-${cellId}`);
-    cellEl.classList.add("striked");
-  });
 };
 
 export const handleEndGame = () => {
