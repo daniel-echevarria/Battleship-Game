@@ -13,10 +13,15 @@ export const translateCoordinatesToCellNum = (coordinate) => {
 export const translateCellNumToCoordinate = (cellNum) => {
   const cellNumString = cellNum.toString();
   const [first, second] = cellNumString.split("");
-  const numCoordinate = parseInt(first) + 1;
-  const letterCoordinate = second
-    ? LETTERS()[parseInt(second)]
-    : LETTERS()[first];
+  let numCoordinate;
+  let letterCoordinate;
+  if (second) {
+    letterCoordinate = LETTERS()[parseInt(second)];
+    numCoordinate = parseInt(first) + 1;
+  } else {
+    letterCoordinate = LETTERS()[first];
+    numCoordinate = 1;
+  }
   const coordinate = [letterCoordinate, numCoordinate].join("");
   return coordinate;
 };

@@ -1,9 +1,6 @@
 import player from "./player";
 import displayGame from "./displayGame";
-import {
-  translateCellNumToCoordinate,
-  translateCoordinatesToCellNum,
-} from "./coordinateTranslation";
+import { translateCellNumToCoordinate } from "./coordinateTranslation";
 import { updateBoard } from "./displayGame";
 
 const log = (stuff) => {
@@ -11,6 +8,8 @@ const log = (stuff) => {
 };
 
 export default function game() {
+  let isGameOver = false;
+
   const humanPlayer = player("human");
   const computerPlayer = player("computer");
 
@@ -30,15 +29,18 @@ export default function game() {
   getHumanAttack(computerCells);
 
   async function gameLoop() {
-    for (let i = 0; i < 10; i++) {
+    while (!isGameOver) {
       if (currentPlayer === humanPlayer) {
         await waitForBoardClick();
-        currentPlayer = computerPlayer;
         updateBoard(computerPlayerBoardEl, computerBoard);
+        currentPlayer = computerPlayer;
       } else {
         computerShot(humanBoard);
         updateBoard(humanPlayerBoardEl, humanBoard);
         currentPlayer = humanPlayer;
+      }
+      if (computerBoard.areAllBoatsSunk() || humanBoard.areAllBoatsSunk()) {
+        isGameOver = true;
       }
     }
   }

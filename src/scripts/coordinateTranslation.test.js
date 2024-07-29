@@ -19,6 +19,9 @@ describe("translateCellNumToCoordinate turns a cellNum to a coordinate", () => {
   test("0 returns a1", () => {
     expect(translateCellNumToCoordinate("0")).toBe("A1");
   });
+  test("4 returns D1", () => {
+    expect(translateCellNumToCoordinate("4")).toBe("E1");
+  });
   test("99 returns j10", () => {
     expect(translateCellNumToCoordinate("99")).toBe("J10");
   });
