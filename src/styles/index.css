@@ -65,3 +65,7 @@ body {
 .boat.striked {
   background-color: red;
 }
+
+.striked {
+  background-color: black;
+}

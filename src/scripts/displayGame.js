@@ -54,21 +54,22 @@ const createBoardCell = (id, playerBoard) => {
   // cell.textContent = id;
   cell.addEventListener("click", function () {
     launchAttack(cell, playerBoard);
-    displayAttack(playerBoard);
+    displayAttack(cell, playerBoard);
+    cell.classList.add("striked");
     playerBoard.areAllBoatsSunk() && handleEndGame();
   });
   return cell;
 };
 
-const displayAttack = (playerBoard) => {
-  const missedShots = playerBoard.getMissedShots();
+const displayAttack = (cell, playerBoard) => {
+  const cellNum = parseInt(cell.id.split("-")[1]);
   const hits = playerBoard.getHits();
-  const strikedWater = missedShots.map((shot) =>
-    translateCoordinatesToCellNum(shot)
-  );
   const strikedBoat = hits.map((shot) => {
-    translateCoordinatesToCellNum(shot);
+    return translateCoordinatesToCellNum(shot);
   });
+  if (strikedBoat.includes(cellNum)) {
+    cell.classList.add("boat");
+  }
 };
 
 const handleEndGame = () => {
@@ -79,7 +80,6 @@ const launchAttack = (cell, playerBoard) => {
   const cellNum = cell.id.split("-")[1];
   const coordinate = translateCellNumToCoordinate(cellNum);
   playerBoard.receiveAttack(coordinate);
-  log(coordinate);
 };
 
 const createCoordinateCell = (text) => {
