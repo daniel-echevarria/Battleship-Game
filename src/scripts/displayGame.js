@@ -1,6 +1,7 @@
 import { createLetterBand, createNumBand } from "./boardDomCoordinates";
 import { translateCoordinatesToCellNum } from "./coordinateTranslation";
 import { launchAttack } from "./game";
+import player from "./player";
 
 const log = (stuff) => {
   console.log(stuff);
@@ -10,8 +11,7 @@ export default function displayGame(player) {
   const boardWithCoordinates = document.createElement("div");
   boardWithCoordinates.classList.add("board-with-co");
 
-  const playerBoard = player.getPlayerBoard();
-  const numberedBoard = createNumberedBoard(playerBoard);
+  const numberedBoard = createNumberedBoard(player);
   const letterBand = createLetterBand();
   const numBand = createNumBand();
 
@@ -38,20 +38,22 @@ const displayBoat = (boat, board) => {
   });
 };
 
-const createNumberedBoard = (playerBoard) => {
+const createNumberedBoard = (player) => {
   const myBoard = document.createElement("div");
   myBoard.classList = "board";
   for (let i = 0; i < 100; i++) {
-    const cell = createBoardCell(i, playerBoard);
+    const cell = createBoardCell(i, player);
     myBoard.append(cell);
   }
   return myBoard;
 };
 
-const createBoardCell = (id, playerBoard) => {
+const createBoardCell = (id, player) => {
   const cell = document.createElement("button");
   cell.classList.add("cell");
   cell.id = `cell-${id}`;
+  if (player.getPlayerType() === "human") return cell;
+  const playerBoard = player.getPlayerBoard();
   cell.addEventListener("click", () => {
     launchAttack(id, playerBoard);
     cell.disabled = true;

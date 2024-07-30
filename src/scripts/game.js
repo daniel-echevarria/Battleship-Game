@@ -27,14 +27,15 @@ export default function game() {
   const humanPlayerBoardEl = displayGame(humanPlayer);
   const computerPlayerBoardEl = displayGame(computerPlayer);
 
-  const computerCells = computerPlayerBoardEl.querySelectorAll("button");
+  document.body.append(humanPlayerBoardEl, computerPlayerBoardEl);
 
   async function gameLoop() {
     while (!isGameOver) {
       if (currentPlayer === humanPlayer) {
-        await waitForCellClick();
+        await waitForClick();
         updateBoard(computerPlayerBoardEl, computerBoard);
         currentPlayer = computerPlayer;
+        log("humans");
       } else {
         computerShot(humanBoard);
         updateBoard(humanPlayerBoardEl, humanBoard);
@@ -47,26 +48,19 @@ export default function game() {
     }
   }
 
-  // while playerBoard.areAllBoatsSunk() && handleEndGame();
-  document.body.append(humanPlayerBoardEl, computerPlayerBoardEl);
-
   gameLoop();
 }
 
-function getPromiseFromEvent(cell, event) {
+function getPromiseFromEvent(computerBoard, event) {
   return new Promise((resolve) => {
-    const listener = () => {
-      cell.removeEventListener(event, listener);
-      resolve(cell);
-    };
-    cell.addEventListener(event, listener);
+    const listener = () => resolve();
+    computerBoard.addEventListener(event, listener);
   });
 }
 
-async function waitForCellClick() {
-  const cell = document.querySelectorAll(".board")[1];
-  const cellNum = await getPromiseFromEvent(cell, "click");
-  return cellNum;
+async function waitForClick() {
+  const computerBoard = document.querySelectorAll(".board")[1];
+  await getPromiseFromEvent(computerBoard, "click");
 }
 
 const computerShot = (humanBoard) => {
