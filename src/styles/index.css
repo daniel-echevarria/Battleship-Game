@@ -47,7 +47,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: lightskyblue;
-  border: 1px solid black;
+  border: 0.5px solid black;
 }
 
 .coordinate {
