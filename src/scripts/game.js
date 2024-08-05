@@ -35,6 +35,7 @@ export default function game() {
         await waitForClick();
         updateBoard(computerPlayerBoardEl, computerBoard);
         currentPlayer = computerPlayer;
+        log("humans");
       } else {
         computerShot(humanBoard);
         updateBoard(humanPlayerBoardEl, humanBoard);
