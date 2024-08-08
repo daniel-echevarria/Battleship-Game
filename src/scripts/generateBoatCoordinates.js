@@ -27,7 +27,7 @@ export const genValidHorizontalInitial = (length) => {
   const maxCol = 10 - length;
   const randomCol = Math.floor(Math.random() * (maxCol + 1));
   const randomRow = Math.floor(Math.random() * 10);
-  const myNum = randomCol.toString() + randomRow.toString();
+  const myNum = randomRow.toString() + randomCol.toString();
   return myNum;
 };
 
@@ -38,3 +38,7 @@ export const genValidVerticalInitial = (length) => {
   const myNum = randomRow.toString() + randomCol.toString();
   return myNum;
 };
+
+for (let i = 0; i < 20; i++) {
+  console.log(genValidHorizontalInitial(5));
+}
