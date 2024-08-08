@@ -5,6 +5,8 @@ import {
   translateCoordinatesToCellNum,
 } from "./coordinateTranslation";
 import { updateBoard } from "./displayGame";
+import generateBoatCoordinates from "./generateBoatCoordinates";
+import generateRandomBoats from "./generateRandomBoats";
 
 const log = (stuff) => {
   console.log(stuff);
@@ -20,9 +22,14 @@ export default function game() {
   const humanBoard = humanPlayer.getPlayerBoard();
   const computerBoard = computerPlayer.getPlayerBoard();
 
-  humanBoard.placeBoat(2, ["A3", "A4"]);
-  humanBoard.placeBoat(3, ["D5", "E5", "F5"]);
-  computerBoard.placeBoat(4, ["B7", "B8", "B9", "B10"]);
+  const myBoats = generateRandomBoats();
+
+  myBoats.forEach((boat) =>
+    humanBoard.placeBoat(boat.length, boat.coordinates)
+  );
+  myBoats.forEach((boat) =>
+    computerBoard.placeBoat(boat.length, boat.coordinates)
+  );
 
   const humanPlayerBoardEl = displayGame(humanPlayer);
   const computerPlayerBoardEl = displayGame(computerPlayer);

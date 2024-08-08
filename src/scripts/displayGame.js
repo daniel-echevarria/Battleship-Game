@@ -52,6 +52,7 @@ const createBoardCell = (id, player) => {
   const cell = document.createElement("button");
   cell.classList.add("cell");
   cell.id = `cell-${id}`;
+  cell.textContent = id;
   if (player.getPlayerType() === "human") return cell;
   const playerBoard = player.getPlayerBoard();
   cell.addEventListener("click", () => {
