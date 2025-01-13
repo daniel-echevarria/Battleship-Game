@@ -24,8 +24,6 @@ This project is part of my portfolio and showcases my ability to:
 - Implement frontend features using React.
 - Follow TDD practices for building reliable applications.
 
-![Screenshot of the game UI](#) <!-- Replace with an actual screenshot or remove if unavailable -->
-
 ---
 
 ## Features
